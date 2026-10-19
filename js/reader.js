@@ -31,6 +31,7 @@ function render(){
       <p class="yuan" style="font-size:22px;letter-spacing:2px;margin:18px 0">${c.original}</p>
       <p class="en">${c.translation}</p>
       ${obsBtn}
+      <button id="speak" class="note" style="margin-top:10px;margin-left:8px;border:1px dashed var(--line);background:none;cursor:pointer;padding:4px 12px">听</button>
       ${notesBlock}
     </div>`;
 
@@ -41,6 +42,14 @@ function render(){
       if (n.style.display === "block") n.classList.add("fade");
     };
   }
+  document.getElementById("speak").onclick = () => {
+    const synth = window.speechSynthesis;
+    if (!synth){ alert("当前浏览器不支持朗读"); return; }
+    synth.cancel();
+    const u = new SpeechSynthesisUtterance(window.__chapter.original);
+    u.lang = "zh-CN"; u.rate = 0.9;
+    synth.speak(u);
+  };
   buildDrawer();
 }
 
