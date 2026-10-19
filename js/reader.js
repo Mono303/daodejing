@@ -1,5 +1,13 @@
 import { clampChapter } from "./nav.mjs";
-const chapters = await (await fetch("data/chapters.json")).json();
+let chapters;
+try {
+  const res = await fetch("data/chapters.json");
+  if (!res.ok) throw new Error(res.status);
+  chapters = await res.json();
+} catch {
+  document.getElementById("stage").innerHTML = '<p class="note" style="text-align:center;margin-top:40px">语料加载失败，请先启动本地服务器（README 有说明）。</p>';
+  throw new Error("chapters.json load failed");
+}
 const TOTAL = chapters.length;
 
 function currentId(){

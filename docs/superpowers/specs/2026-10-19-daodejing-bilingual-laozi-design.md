@@ -24,8 +24,8 @@
 把"调用大模型"封装成单一前端接口，三种部署方案共用同一套前端，后端可插拔：
 
 ```
-对话界面  →  askLaozi(messages, {chapter})  →  ① 直连 / ② 轻后端 / ③ serverless
-            (接口不变)                           (只换这一个函数的实现)
+对话界面  →  askLaozi(messages, {onToken})  →  ① 直连 / ② 轻后端 / ③ serverless
+            (接口不变)                          (只换这一个函数的实现)
 ```
 
 - **前期（方案三·直连）**：`askLaozi` 内部直接 fetch 大模型 API，Key 读自本地 `config.js`，走流式输出。仅用于本地/内网演示。
@@ -115,7 +115,7 @@ daodejing-project/
 - "问老子此章"把当前章原文 + 译文 + 注释塞进上下文，回答贴着该章。
 
 ### 接口层 `askLaozi.js`（可插拔）
-- 对外只暴露 `askLaozi(messages, { chapter })`，返回流式文本。
+- 对外只暴露 `askLaozi(messages, { onToken })`，返回流式文本。
 - 前期：直连国内大模型 API（读 `config.js` 的 Key），`stream: true` 逐字显示。
 - 升级位：改 `fetch('/api/chat')` 即切后端，界面不动。
 

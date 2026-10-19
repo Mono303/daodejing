@@ -34,11 +34,13 @@ panel.querySelector("#chatX").onclick = () => panel.classList.remove("open");
 
 async function send() {
   const input = panel.querySelector("#chatIn");
+  const sendBtn = panel.querySelector("#chatSend");
   const text = input.value.trim();
   if (!text) return;
   input.value = "";
   bubble(text, true);
   const out = bubble("", false);
+  sendBtn.disabled = true;
   try {
     const messages = buildMessages(history, text, pendingChapter);
     pendingChapter = null; // 章节上下文只随首问带入
@@ -48,6 +50,8 @@ async function send() {
     history.push({ role: "user", content: text }, { role: "assistant", content: full });
   } catch (e) {
     out.textContent = "（" + e.message + "）";
+  } finally {
+    sendBtn.disabled = false;
   }
 }
 

@@ -9,7 +9,7 @@ export const MODEL_PARAMS = { temperature: 0.8 };
 export function buildMessages(history, userText, chapter) {
   let sys = SYSTEM_PROMPT;
   if (chapter) {
-    sys += `\n\n【当前章·第${chapter.id}章 ${chapter.title}】\n原文：${chapter.original}\n英译：${chapter.translation}\n注释：${chapter.commentaryZh}`;
+    sys += `\n\n【当前章·第${chapter.id}章 ${chapter.title}】\n原文：${chapter.original}\n英译：${chapter.translation}` + (chapter.commentaryZh ? `\n注释：${chapter.commentaryZh}` : "");
   }
   return [{ role: "system", content: sys }, ...history, { role: "user", content: userText }];
 }
