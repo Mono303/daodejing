@@ -4,8 +4,8 @@ const isCJK = (s) => /[一-鿿]/.test(s);
 // 章首编号：行首 1~2 位数字后跟 . 或 。（兼顾半角/全角与前导空格）
 const CH_HEAD = /^\s*(\d{1,2})\s*[.．。]\s*/;
 
-// 注释文件章号：行首仅含 1~2 位数字（裸章号行）
-const COMM_CH_NUM = /^\s*(\d{1,2})\s*$/;
+// 注释语料的章节哨兵：独占一行的章号 1–81（收紧范围，避免误吞恰为纯数字的正文段）
+const COMM_CH_NUM = /^\s*([1-9]|[1-7]\d|8[01])\s*$/;
 
 export function splitTranslationCorpus(paragraphs) {
   const chapters = [];
