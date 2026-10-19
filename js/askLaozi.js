@@ -45,5 +45,17 @@ export async function askLaozi(messages, { onToken } = {}) {
     }
   }
 
+  // 收尾：冲刷缓冲区里残留的最后一行（容忍末行无换行的服务端）
+  const tail = buf.trim();
+  if (tail.startsWith("data:")) {
+    const data = tail.slice(5).trim();
+    if (data && data !== "[DONE]") {
+      try {
+        const delta = JSON.parse(data).choices?.[0]?.delta?.content;
+        if (delta) { full += delta; onToken?.(delta); }
+      } catch {}
+    }
+  }
+
   return full;
 }

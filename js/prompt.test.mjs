@@ -18,5 +18,5 @@ test("buildMessages 带章节上下文", () => {
 });
 
 test("SYSTEM_PROMPT 含人设要点", () => {
-  for (const kw of ["吾","半文半白","不知"]) assert.ok(SYSTEM_PROMPT.includes(kw), kw);
+  for (const kw of ["吾","半文半白","不知","不争","知足","顺其自然"]) assert.ok(SYSTEM_PROMPT.includes(kw), kw);
 });
