@@ -1,10 +1,21 @@
 // 升级位：把下方直连 fetch 换成 fetch("/api/chat", {...}) 即切轻后端，调用方不变。
 // config.js 由用户本地提供（已 gitignore），格式：
 //   export const CONFIG = { apiKey: "sk-...", baseUrl: "https://...", model: "..." };
-import { CONFIG } from "../config.js";
+// config.js 在此惰性加载（dynamic import），确保 config.js 缺失时聊天界面仍能正常渲染，
+// 仅在用户实际发送消息时才报告配置错误。
 import { MODEL_PARAMS } from "./prompt.js";
 
 export async function askLaozi(messages, { onToken } = {}) {
+  let CONFIG;
+  try {
+    ({ CONFIG } = await import("../config.js"));
+  } catch {
+    throw new Error("未找到 config.js，请复制 config.example.js 为 config.js 并填入 API Key。");
+  }
+  if (!CONFIG?.apiKey || CONFIG.apiKey === "YOUR_API_KEY") {
+    throw new Error("请在 config.js 中填入有效的 API Key。");
+  }
+
   const res = await fetch(`${CONFIG.baseUrl}/chat/completions`, {
     method: "POST",
     headers: {
