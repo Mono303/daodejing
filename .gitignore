@@ -1,0 +1,14 @@
+# 密钥（真实 Key 不入库）
+config.js
+
+# 临时语料原始提取
+_corpus_raw/
+
+# 可视化辅助缓存
+.superpowers/
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+node_modules/
