@@ -32,6 +32,7 @@ function render(){
       <p class="en">${c.translation}</p>
       ${obsBtn}
       <button id="speak" class="note" style="margin-top:10px;margin-left:8px;border:1px dashed var(--line);background:none;cursor:pointer;padding:4px 12px">听</button>
+      <button id="askch" class="note" style="margin-top:10px;margin-left:8px;border:1px dashed var(--cinnabar);background:none;cursor:pointer;padding:4px 12px;color:var(--cinnabar)">问老子此章</button>
       ${notesBlock}
     </div>`;
 
@@ -50,6 +51,7 @@ function render(){
     u.lang = "zh-CN"; u.rate = 0.9;
     synth.speak(u);
   };
+  document.getElementById("askch").onclick = () => window.openChat(true);
   buildDrawer();
 }
 
