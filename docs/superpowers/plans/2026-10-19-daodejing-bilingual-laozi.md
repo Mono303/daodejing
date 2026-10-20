@@ -298,6 +298,8 @@ git commit -m "feat: 古风主题样式"
 - Consumes: `data/chapters.json`、`css/style.css`。
 - Produces: 点击宫格跳 `chapter.html?ch=<id>`。
 
+**变更记录（2026-10-19）：** 目录改为**八十一章单一网格**，不分道经/德经。下方 Step 1/2 代码中的双网格（`#dao`/`#de`）以实际实现为准——`index.html` 用单个 `<div class="grid" id="all">`，`catalog.js` 用 `chapters.map(cell)` 渲染全部。
+
 - [ ] **Step 1: 写 `index.html`**
 
 ```html

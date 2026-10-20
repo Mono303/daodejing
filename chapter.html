@@ -1,0 +1,21 @@
+<!DOCTYPE html><html lang="zh"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>道德经</title><link rel="stylesheet" href="css/style.css"></head>
+<body>
+  <nav id="drawer" class="drawer"></nav>
+  <div class="wrap">
+    <button id="menu" class="note" style="border:none;background:none;cursor:pointer">☰ 目录</button>
+    <a href="index.html" class="note" style="float:right">⌂ 首页</a>
+    <div id="stage"></div>
+    <div style="display:flex;justify-content:space-between;margin-top:30px">
+      <button id="prev" class="note" style="border:1px solid var(--line);background:#faf6ec;cursor:pointer;padding:6px 14px">◀ 上一章</button>
+      <button id="next" class="note" style="border:1px solid var(--line);background:#faf6ec;cursor:pointer;padding:6px 14px">下一章 ▶</button>
+    </div>
+    <div style="text-align:center;margin-top:16px">
+      <button id="card" class="note" style="border:1px solid var(--line);background:#faf6ec;cursor:pointer;padding:6px 14px">藏卡</button>
+    </div>
+  </div>
+  <div class="fab" onclick="window.openChat(false)">问道</div>
+  <script type="module" src="js/chat.js"></script>
+  <script type="module" src="js/reader.js"></script>
+</body></html>
