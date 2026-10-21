@@ -1,0 +1,20 @@
+# 用法：复制到 /etc/systemd/system/daodejing.service
+# 前提：仓库在 /opt/daodejing，/opt/daodejing/.env 已按 .env.example 填写
+[Unit]
+Description=Daodejing static site + chat proxy
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/opt/daodejing
+EnvironmentFile=/opt/daodejing/.env
+ExecStart=/usr/bin/node /opt/daodejing/server.js
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

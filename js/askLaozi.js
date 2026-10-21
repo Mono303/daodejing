@@ -6,26 +6,41 @@
 import { MODEL_PARAMS } from "./prompt.js";
 
 export async function askLaozi(messages, { onToken } = {}) {
-  let CONFIG;
+  let CONFIG = null;
   try {
     ({ CONFIG } = await import("../config.js"));
   } catch {
-    throw new Error("未找到 config.js，请复制 config.example.js 为 config.js 并填入 API Key。");
-  }
-  if (!CONFIG?.apiKey || CONFIG.apiKey === "YOUR_API_KEY") {
-    throw new Error("请在 config.js 中填入有效的 API Key。");
+    // 线上模式：config.js 不部署，对话走服务器代理 /api/chat
   }
 
-  const res = await fetch(`${CONFIG.baseUrl}/chat/completions`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${CONFIG.apiKey}`
-    },
-    body: JSON.stringify({ model: CONFIG.model, messages, stream: true, ...MODEL_PARAMS })
-  });
+  const direct = Boolean(CONFIG?.apiKey && CONFIG.apiKey !== "YOUR_API_KEY" && CONFIG.baseUrl);
+  if (CONFIG && !direct) throw new Error("请在 config.js 中填入有效的 API Key。");
 
-  if (!res.ok) throw new Error(`大模型请求失败: ${res.status}`);
+  const url = direct ? `${CONFIG.baseUrl}/chat/completions` : "/api/chat";
+  const headers = { "Content-Type": "application/json" };
+  if (direct) headers.Authorization = `Bearer ${CONFIG.apiKey}`;
+
+  let res;
+  try {
+    res = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(direct
+        ? { model: CONFIG.model, messages, stream: true, ...MODEL_PARAMS }
+        : { messages, stream: true, ...MODEL_PARAMS })
+    });
+  } catch {
+    throw new Error(direct
+      ? "网络错误，无法连接大模型服务。"
+      : "对话服务不可用，请确认服务器已启动（见 README 部署说明）。");
+  }
+
+  if (!res.ok) {
+    if (!direct && (res.status === 404 || res.status === 405)) {
+      throw new Error("对话服务未启用：本地请用 node server.js 启动；或复制 config.example.js 为 config.js 直连。");
+    }
+    throw new Error(`大模型请求失败: ${res.status}`);
+  }
 
   const reader = res.body.getReader();
   const dec = new TextDecoder();
