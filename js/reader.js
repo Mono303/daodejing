@@ -81,27 +81,4 @@ addEventListener("keydown", (e) => {
   if (e.key === "ArrowLeft") go(id - 1);
   if (e.key === "ArrowRight") go(id + 1);
 });
-document.getElementById("card").onclick = () => {
-  const c = window.__chapter;
-  const cv = document.createElement("canvas"); cv.width = 600; cv.height = 900;
-  const g = cv.getContext("2d");
-  g.fillStyle = "#f5f0e6"; g.fillRect(0, 0, 600, 900);
-  g.strokeStyle = "#d8ccae"; g.lineWidth = 2; g.strokeRect(24, 24, 552, 852);
-  g.fillStyle = "#9c3b2e"; g.font = "28px serif"; g.textAlign = "center";
-  g.fillText(`第${c.id}章 · ${c.title}`, 300, 110);
-  g.fillStyle = "#5c4a32"; g.font = "26px serif";
-  wrap(g, c.original, 300, 190, 500, 40);
-  g.fillStyle = "#8a7a5c"; g.font = "16px serif";
-  g.fillText("道德經", 300, 850);
-  const a = document.createElement("a");
-  a.download = `道德经-第${c.id}章.png`; a.href = cv.toDataURL("image/png"); a.click();
-};
-function wrap(g, text, x, y, maxW, lh) {
-  let line = "";
-  for (const ch of text) {
-    if (g.measureText(line + ch).width > maxW) { g.fillText(line, x, y); line = ch; y += lh; }
-    else line += ch;
-  }
-  if (line) g.fillText(line, x, y);
-}
 render();

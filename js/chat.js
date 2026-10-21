@@ -1,10 +1,11 @@
 import { askLaozi } from "./askLaozi.js";
 import { buildMessages } from "./prompt.js";
+import { latestExchange, downloadShareImage } from "./share.js";
 
 const panel = document.createElement("div");
 panel.className = "chat";
 panel.innerHTML = `
-  <div class="hd">问道 · 与老子对话 <span style="float:right;cursor:pointer" id="chatX">✕</span></div>
+  <div class="hd">问道 · 与老子对话 <span style="float:right;cursor:pointer" id="chatX">✕</span><span style="float:right;cursor:pointer;margin-right:12px;font-size:13px;border:1px solid var(--cinnabar);border-radius:4px;padding:0 6px" id="chatShare">分享给同道</span></div>
   <div class="body" id="chatBody"></div>
   <div class="ft"><input id="chatIn" placeholder="敢问…" autocomplete="off"><button id="chatSend">问</button></div>`;
 document.body.appendChild(panel);
@@ -31,6 +32,12 @@ window.openChat = (withChapter) => {
 };
 
 panel.querySelector("#chatX").onclick = () => panel.classList.remove("open");
+
+panel.querySelector("#chatShare").onclick = () => {
+  const ex = latestExchange(history);
+  if (!ex) { alert("先问道，再分享"); return; }
+  downloadShareImage({ chapter: window.__chapter, question: ex.question, answer: ex.answer });
+};
 
 async function send() {
   const input = panel.querySelector("#chatIn");
